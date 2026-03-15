@@ -1,3 +1,8 @@
+# Django imports
 from django.contrib import admin
 
-# Register your models here.
+# Module imports
+from authentication.models import User, Account
+
+admin.site.register(User)
+admin.site.register(Account)

@@ -36,12 +36,13 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'corsheaders',
+    'django_extensions',
     'cid.apps.CidAppConfig',
 ]
 
 # ADD In House Project Apps Here
 PROJECT_APPS = [
-
+    'authentication',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -140,6 +141,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "authentication.User"
 
 # Django-correlation-id Config
 CID_GENERATE = True
