@@ -43,12 +43,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_password_reset_required = models.BooleanField(default=False)
 
     last_active = models.DateTimeField(default=timezone.now, null=True)
-    last_login_time = models.DateTimeField(null=True)
-    last_logout_time = models.DateTimeField(null=True)
+    last_login_time = models.DateTimeField(null=True, blank=True)
+    last_logout_time = models.DateTimeField(null=True, blank=True)
 
     # timezone
     USER_TIMEZONE_CHOICES = tuple(zip(pytz.common_timezones, pytz.common_timezones))
-    user_timezone = models.CharField(max_length=255, choices=USER_TIMEZONE_CHOICES, default="UTC")
+    user_timezone = models.CharField(max_length=255, choices=USER_TIMEZONE_CHOICES, default="Asia/Dhaka")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
