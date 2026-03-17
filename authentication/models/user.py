@@ -120,3 +120,8 @@ class Account(TimeAuditModel):
         verbose_name_plural = "Accounts"
         db_table = "accounts"
         ordering = ("-created_at",)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = str(ulid.ULID())
+        super().save(*args, **kwargs)
