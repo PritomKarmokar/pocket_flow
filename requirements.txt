@@ -1,5 +1,7 @@
 asgiref==3.11.1
 asttokens==3.0.1
+certifi==2026.2.25
+charset-normalizer==3.4.6
 decorator==5.2.1
 Django==5.2.8
 django-cid==3.0
@@ -9,6 +11,7 @@ django-extensions==4.1
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
 executing==2.2.1
+idna==3.11
 ipython==9.11.0
 ipython_pygments_lexers==1.1.1
 jedi==0.19.2
@@ -23,8 +26,10 @@ Pygments==2.19.2
 PyJWT==2.12.1
 python-ulid==3.1.0
 pytz==2026.1.post1
+requests==2.32.5
 sqlparse==0.5.5
 stack-data==0.6.3
 traitlets==5.14.3
 typing_extensions==4.15.0
+urllib3==2.6.3
 wcwidth==0.6.0
