@@ -195,6 +195,7 @@ LOGGING = {
 # LOG config end
 
 REQUEST_TIMEOUT = env.int("REQUEST_TIMEOUT", 30)
+SERVICE_NAME = env.str("SERVICE_NAME", "pocket-flow")
 
 # CORS CONFIG
 CORS_ALLOW_ALL_ORIGINS = True
@@ -264,3 +265,8 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 }
 # Simple JWT settings end
+
+# Google OAuth Config
+GOOGLE_CLIENT_ID = env.str('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = env.str('GOOGLE_CLIENT_SECRET')
+# Google OAuth Config End

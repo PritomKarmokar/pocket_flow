@@ -35,6 +35,9 @@ class GoogleOAuthProvider:
     def get_token_url(self):
         return self.token_url
 
+    def get_auth_url(self):
+        return self.auth_url
+
     def get_user_token(self, data, headers=None):
         try:
             headers = headers or {}
