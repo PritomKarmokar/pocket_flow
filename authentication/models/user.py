@@ -1,8 +1,10 @@
 # Python imports
 import pytz
 import ulid
+import uuid
 import random
 import string
+from typing import Any, Dict
 
 # Django imports
 from django.db import models
@@ -11,6 +13,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserM
 
 # Module imports
 from applibs.mixins import TimeAuditModel
+from applibs.utils import sanitize_email
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.CharField(max_length=26, unique=True, editable=False, primary_key=True)
@@ -96,6 +99,26 @@ class User(AbstractBaseUser, PermissionsMixin):
             else "".join(random.choice(string.ascii_letters) for _ in range(6))
         )
 
+    def complete_login_or_signup(self, user_data: Dict[str, Any]) -> None:
+        email = user_data.get('email')
+        email = sanitize_email(email)
+
+        self.email = email
+        if not self.username:
+            self.username = user_data.get("given_name", None)
+
+        if user_data.get("user", {}).get("is_password_autoset"):
+            self.is_password_autoset = True
+            self.is_email_verified = True
+
+        # Set User details
+        first_name = user_data.get("given_name", None)
+        last_name = user_data.get("family_name", None)
+        self.first_name = first_name if first_name else ""
+        self.last_name = last_name if last_name else ""
+
+        self.save()
+
 class Account(TimeAuditModel):
     PROVIDER_CHOICES = (
         ("google", "Google"),
@@ -121,7 +144,11 @@ class Account(TimeAuditModel):
         db_table = "accounts"
         ordering = ("-created_at",)
 
+    def __str__(self) -> str:
+        return f"{self.get_provider_display()} — {self.user}"
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.id = str(ulid.ULID())
         super().save(*args, **kwargs)
+

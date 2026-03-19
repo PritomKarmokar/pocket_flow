@@ -1,6 +1,7 @@
 # Python imports
 import requests
 from urllib.parse import urlencode
+from typing import Optional, Dict, Any
 
 # Django Imports
 from django.conf import settings
@@ -9,6 +10,8 @@ from django.conf import settings
 from applibs.logger import get_logger
 
 logger = get_logger(__name__)
+
+service_name = settings.SERVICE_NAME
 
 class GoogleOAuthProvider:
     token_url = "https://oauth2.googleapis.com/token"
@@ -19,7 +22,7 @@ class GoogleOAuthProvider:
     def __init__(self, request, state=None):
         self.client_id = settings.GOOGLE_CLIENT_ID
         self.client_secret = settings.GOOGLE_CLIENT_SECRET
-        self.redirect_uri = f"""{"https" if request.is_secure() else "http"}://{request.get_host()}/auth/google/callback/"""
+        self.redirect_uri = f"""{"https" if request.is_secure() else "http"}://{request.get_host()}/{service_name}/api/v1/auth/google/callback/"""
         self.url_params = {
             "client_id": self.client_id,
             "scope": self.scope,
@@ -32,13 +35,20 @@ class GoogleOAuthProvider:
         self.auth_url = f"https://accounts.google.com/o/oauth2/v2/auth?{urlencode(self.url_params)}"
 
 
-    def get_token_url(self):
+    def get_token_url(self) -> str:
         return self.token_url
 
-    def get_auth_url(self):
+    def get_auth_url(self) -> str:
         return self.auth_url
 
-    def get_user_token(self, data, headers=None):
+    @staticmethod
+    def get_headers(token_type: str, token: str) -> Dict[str, Any]:
+        headers = {
+            "Authorization": f"{token_type} {token}"
+        }
+        return headers
+
+    def get_user_token(self, data, headers=None) -> Dict[str, Any] | None:
         try:
             headers = headers or {}
             response = requests.post(self.get_token_url(), data=data, headers=headers)
@@ -48,7 +58,7 @@ class GoogleOAuthProvider:
             logger.error("Error Occurred while getting User token from Google", str(e))
             return None
 
-    def set_token_data(self, code):
+    def set_token_data(self, code: str) -> Dict[str, Any] | None:
         data = {
             "code": code,
             "client_id": self.client_id,
@@ -62,4 +72,13 @@ class GoogleOAuthProvider:
             return None
 
         return token_response
-    pass
+
+    def get_user_info(self, token_type: str, token: str) -> Dict[str, Any] | None:
+        try:
+            headers = self.get_headers(token_type, token)
+            response = requests.get(url=self.userinfo_url, headers=headers, timeout=settings.REQUEST_TIMEOUT)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            logger.error("Error Occurred while getting User Info from Google:", str(e))
+            return None
