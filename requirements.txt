@@ -11,11 +11,13 @@ django-extensions==4.1
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
 executing==2.2.1
+gunicorn==25.1.0
 idna==3.11
 ipython==9.11.0
 ipython_pygments_lexers==1.1.1
 jedi==0.19.2
 matplotlib-inline==0.2.1
+packaging==26.0
 parso==0.8.6
 pexpect==4.9.0
 prompt_toolkit==3.0.52

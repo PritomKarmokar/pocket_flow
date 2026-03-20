@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 
 api_prefix = "api/v1"
 service_name = settings.SERVICE_NAME
@@ -9,7 +10,7 @@ service_name = settings.SERVICE_NAME
 urlpatterns = [
     path(f'{service_name}/admin/', admin.site.urls),
     path(f'{service_name}/{api_prefix}/auth/', include('authentication.urls')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Admin
 admin.site.site_header = 'Pocket Flow'

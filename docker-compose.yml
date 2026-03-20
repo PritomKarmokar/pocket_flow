@@ -1,0 +1,25 @@
+services:
+  postgres_db:
+    image: postgres:17
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - .env
+
+  django_web:
+    build: .
+    container_name: pocket_flow
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_db
+    env_file:
+      - .env
+volumes:
+  postgres_data:
