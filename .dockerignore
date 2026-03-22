@@ -1,0 +1,29 @@
+# Python/Django specific
+*.pyc
+*.log
+__pycache__/
+venv/
+.venv/
+pip-wheel-cache/
+.tox/
+.mypy_cache/
+.pytest_cache/
+celerybeat.pid
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Environment files and secrets
+.env
+.flaskenv
+*.enc
+# Optionally ignore specific media/static files that are generated at runtime
+# mediafiles/
+# staticfiles/
